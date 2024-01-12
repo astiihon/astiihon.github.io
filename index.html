@@ -1,0 +1,23 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Customer Site</title><script defer="defer" src="picea.online.js"></script></head><body><div class="col-lg-8 mx-auto p-3 py-md-5"><header class="d-flex align-items-center pb-3 mb-5 border-bottom"><a href="/" class="d-flex align-items-center text-dark text-decoration-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img"><title>Bootstrap</title></svg> <span class="fs-4">Customer Site</span></a></header><main><h1>Picea Online Widget</h1><div class="mt-3 d-flex flex-wrap"><button class="m-2 btn btn-primary btn-lg" onclick="demo1()">Run widget on modal</button> <button class="m-2 btn btn-secondary btn-lg" onclick="demo2()">Run widget on page</button> <button class="m-2 btn btn-secondary btn-lg" onclick="restore()">Restore widget</button></div><div id="widget" class="row g-5"><div id="my-root" style="height: 300px; display: flex"></div></div><hr class="col-3 col-md-2 mb-5"/></main></div><script>function onTransactionCompleted(tx) {
+
+        console.debug("Transaction Details", tx)
+        
+        let output = ''
+        for (const [key, value] of Object.entries(tx)) {
+          const lb = output !== '' ? '\n' : ''
+          output += `${lb}${key}: ${value}`
+        }
+        console.log('===output: ', output)
+      }
+
+      const responseVersion = 1 | 2;
+
+      function demo1() {
+        picea.run({ user: 'workflow@PCSA', password: 'fLTi4I44#PSFy*2S', mode: 0, responseVersion: 2}, onTransactionCompleted)
+      }
+      function demo2() {
+        picea.run({ user: 'workflow@PCSA', password: 'fLTi4I44#PSFy*2S', element: 'my-root', mode: 0 })
+      }
+      function restore() {
+        picea.restore({ user: 'workflow@PCSA', password: 'fLTi4I44#PSFy*2S', mode: 0, responseVersion: 2}, onTransactionCompleted, '')
+      }</script></body></html>
