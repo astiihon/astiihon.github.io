@@ -21,7 +21,7 @@
 
         try{ 
           navigator.mediaDevices.getUserMedia( {
-            video: { facingMode: 'environment', width: 1920, height: 1080 }
+            video: { facingMode: 'environment', width: 1080, height: 1920 }
           }).then( (stream) => {
             const video = document.getElementById( 'my-video');
             video.srcObject = stream;
