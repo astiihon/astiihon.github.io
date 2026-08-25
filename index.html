@@ -81,7 +81,7 @@
 
     input.addEventListener('change', updateImageDisplay);
 
-    function updateImageDisplay() {
+    async function updateImageDisplay() {
       while(preview.firstChild) {
         preview.removeChild(preview.firstChild);
       }
@@ -107,8 +107,9 @@
             listItem.appendChild(image);
             listItem.appendChild(para);
 			
-			logStuff( "Before convert");
-			imageToBase64(file).then( (r) => logStuff( "After convert") )
+			logStuff( "Before convert call");
+			let t = await imageToBase64(file);
+			logStuff( "After convert call")
           } else {
             para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
             listItem.appendChild(para);
