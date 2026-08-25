@@ -107,9 +107,14 @@
             listItem.appendChild(image);
             listItem.appendChild(para);
 			
-			logStuff( "Before convert call");
-			let t = await imageToBase64(file);
-			logStuff( "After convert call")
+			try {
+				logStuff( "Before convert call");
+				let t = await imageToBase64(file);
+				logStuff( "After convert call")
+			} catch( ee) {
+				logStuff( "await catch")
+				logStuff( ee)
+			}
           } else {
             para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
             listItem.appendChild(para);
