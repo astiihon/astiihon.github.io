@@ -107,7 +107,8 @@
             listItem.appendChild(image);
             listItem.appendChild(para);
 			
-			imageToBase64(file)
+			logStuff( "Before convert");
+			imageToBase64(file).then( (r) => logStuff( "After convert") )
           } else {
             para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
             listItem.appendChild(para);
