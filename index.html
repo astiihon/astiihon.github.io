@@ -148,6 +148,7 @@
     }
 	
 	function imageToBase64(img) {
+		logStuff( "begin convert func")
 		return new Promise((resolve, reject) => {
 		  const reader = new FileReader()
 		  reader.onload = () => {
@@ -164,12 +165,14 @@
 			reject(null)
 		  }
 		  try {
+			logStuff( "About to read");
 			reader.readAsDataURL(img)
 		  } catch (ee) {
 			logStuff( "Exception")
 			logStuff(ee)
 			reject(null)
 		  }
+		  logStuff( "End convert func")
 		})
 	}
 	
