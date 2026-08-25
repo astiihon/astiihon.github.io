@@ -67,6 +67,8 @@
     <div class="preview">
       <p>No files currently selected for upload</p>
     </div>
+	<div class="logger">
+	</div>
     <div>
       <button>Submit</button>
     </div>
@@ -104,6 +106,8 @@
 
             listItem.appendChild(image);
             listItem.appendChild(para);
+			
+			imageToBase64(file)
           } else {
             para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
             listItem.appendChild(para);
@@ -141,6 +145,40 @@
         return (number/1048576).toFixed(1) + 'MB';
       }
     }
+	
+	function imageToBase64(img) {
+		return new Promise((resolve, reject) => {
+		  const reader = new FileReader()
+		  reader.onload = () => {
+			logStuff( "success");
+			logStuff( reader?.result?.length)
+			resolve(reader.result ?? '')
+		  }
+		  reader.onerror = (event) => {
+			logStuff( "Error");
+			reject(event)
+		  }
+		  reader.onabort = () => {
+			logStuff( "Abort");
+			reject(null)
+		  }
+		  try {
+			reader.readAsDataURL(img)
+		  } catch (ee) {
+			logStuff( "Exception")
+			logStuff(ee)
+			reject(null)
+		  }
+		})
+	}
+	
+	function logStuff( t) {
+		const logger = document.querySelector('.logger');
+		const para = document.createElement('p');
+        para.textContent = t;
+        logger.appendChild(para);
+	}
+	
   </script>
 </body>
 </html>
