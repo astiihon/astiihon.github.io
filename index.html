@@ -70,7 +70,7 @@
 	<div class="logger">
 	</div>
     <div>
-      <button class='button' type='button'>Submit</button>
+      <button class='button' type='button'>Test audio</button>
     </div>
   </form>
   <script>
@@ -220,7 +220,7 @@
 				
 				await delay(stepDelay);
 				if( navigator?.mediaDevices?.getUserMedia) {
-					logStuff( "have getUserMedia")
+					logStuff( "About to getUserMedia");
 					await delay(stepDelay);
 					stream = await navigator.mediaDevices.getUserMedia({
 					  audio: {
@@ -242,19 +242,21 @@
 						analyser.minDecibels = -95
 						analyser.maxDecibels = -20
 
+						logStuff( "About to createMediaStreamSource")
 						await delay(stepDelay);
 						const source = audioContext.createMediaStreamSource(stream)
 						logStuff( !!source ? "Source ok" : "Source not ok")
 						if( source) {
-							source.connect(analyser)
+							logStuff( "About to connect analyzer")
 							await delay(stepDelay);
+							source.connect(analyser)
 						}
 					}
 				}
 				else {
-					logStuff( navigator ? "Navigator" : "no Navigator");
-					logStuff( navigator?.mediaDevices ? "Media devices" : "No mediaDevices");
-					logStuff( navigator?.mediaDevices?.getUserMedia ? "userMedia" : "No userMedia");
+					logStuff( navigator ? "Have navigator" : "No navigator");
+					logStuff( navigator?.mediaDevices ? "Have mediaDevices" : "No mediaDevices");
+					logStuff( navigator?.mediaDevices?.getUserMedia ? "Have getUserMedia" : "No getUserMedia");
 				}
 			}
 			logStuff( 'Done')
