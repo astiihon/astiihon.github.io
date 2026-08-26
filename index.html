@@ -207,14 +207,17 @@
 					return;
 				}
 			}
+			logStuff( 'Have audio constructor')
+			await delay(1000);
 			audioContext = new AudioCtor()
 			logStuff( !!audioContext ? "audioContext ok" : "audioContext not ok")
 			if( audioContext) {
 				logStuff('About to resume')
-				delay(1000);
+				await delay(1000);
 				await audioContext.resume();
 				logStuff( 'Resumed');
 				
+				await delay(1000);
 				stream = await navigator.mediaDevices.getUserMedia({
 				  audio: {
 					echoCancellation: false,
@@ -226,6 +229,7 @@
 				})
 				logStuff( !!stream ? "Stream ok" : "stream not ok")
 				
+				await delay(1000);
 				const analyser = audioContext.createAnalyser()
 				logStuff( !!analyser ? "Analyser ok" : "Analyser not ok")
 				if( analyser) {
@@ -234,6 +238,7 @@
 					analyser.minDecibels = -95
 					analyser.maxDecibels = -20
 
+					await delay(1000);
 					const source = audioContext.createMediaStreamSource(stream)
 					logStuff( !!source ? "Source ok" : "Source not ok")
 					if( source) {
