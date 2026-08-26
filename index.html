@@ -70,12 +70,15 @@
 	<div class="logger">
 	</div>
     <div>
-      <button>Submit</button>
+      <button class='button' type='button'>Submit</button>
     </div>
   </form>
   <script>
     const input = document.querySelector('input');
     const preview = document.querySelector('.preview');
+	const button = document.querySelector('.button');
+	
+	button.addEventListener('click', buttonClick);
 
     input.style.opacity = 0;
 
@@ -187,6 +190,71 @@
 		const para = document.createElement('p');
         para.textContent = t;
         logger.appendChild(para);
+	}
+	
+	const FFT_SIZE = 4096
+	
+	async function buttonClick() {
+		let audioContext = undefined;
+		let strean = undefined;
+		try {
+			let AudioCtor = window.AudioContext;
+			if( !AudioCtor) {
+				logStuff( 'No window.AudioContext');
+				AudioCtor = window.webkitAudioContext;
+				if( !AudioCtor) {
+					logStuff( 'No window.webkitAudioContext');
+					return;
+				}
+			}
+			audioContext = new AudioCtor()
+			logStuff( !!audioContext ? "audioContext ok" : "audioContext not ok")
+			if( audioContext) {
+				await audioContext.resume();
+				logStuff( 'Resumed');
+				
+				stream = await navigator.mediaDevices.getUserMedia({
+				  audio: {
+					echoCancellation: false,
+					noiseSuppression: false,
+					autoGainControl: false,
+					channelCount: { ideal: 1 }
+				  },
+				  video: false
+				})
+				logStuff( !!stream ? "Stream ok" : "stream not ok")
+				
+				const analyser = audioContext.createAnalyser()
+				logStuff( !!analyser ? "Analyser ok" : "Analyser not ok")
+				if( analyser) {
+					analyser.fftSize = FFT_SIZE
+					analyser.smoothingTimeConstant = 0.12
+					analyser.minDecibels = -95
+					analyser.maxDecibels = -20
+
+					const source = audioContext.createMediaStreamSource(stream)
+					logStuff( !!source ? "Source ok" : "Source not ok")
+					if( source) {
+						source.connect(analyser)
+						delay(250);
+					}
+				}
+			}
+			logStuff( 'Done')
+		} catch(ee) {
+			logStuff( 'Button exception');
+			logStuff( ee)
+		} finally {
+			stream?.getTracks().forEach((track) => track.stop())
+			if (audioContext && audioContext.state !== 'closed') {
+				await audioContext.close().catch(() => undefined)
+			}
+			logStuff( 'Finally')
+		}
+	}
+	
+	function delay(ms) {
+		return new Promise((resolve) => window.setTimeout(resolve, ms))
 	}
 	
   </script>
