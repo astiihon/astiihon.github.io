@@ -220,6 +220,8 @@
 				
 				await delay(stepDelay);
 				if( navigator?.mediaDevices?.getUserMedia) {
+					logStuff( "have getUserMedia")
+					await delay(stepDelay);
 					stream = await navigator.mediaDevices.getUserMedia({
 					  audio: {
 						echoCancellation: false,
