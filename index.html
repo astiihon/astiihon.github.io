@@ -256,7 +256,16 @@
 	}
 	
 	function delay(ms) {
-		return new Promise((resolve) => window.setTimeout(resolve, ms))
+		try {
+			if( !window.setTimeout) {
+				logStuff( "no timeout");
+				return new Promise((resolve) => resolve());
+			}
+			return new Promise((resolve) => window.setTimeout(resolve, ms))
+		} catch ( ee) {
+			logStuff( 'delay exception')
+			logStuff( ee);
+		}
 	}
 	
   </script>
