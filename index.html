@@ -193,6 +193,7 @@
 	}
 	
 	const FFT_SIZE = 4096
+	const stepDelay = 1500
 	
 	async function buttonClick() {
 		let audioContext = undefined;
@@ -208,43 +209,50 @@
 				}
 			}
 			logStuff( 'Have audio constructor')
-			await delay(1000);
+			await delay(stepDelay);
 			audioContext = new AudioCtor()
 			logStuff( !!audioContext ? "audioContext ok" : "audioContext not ok")
 			if( audioContext) {
 				logStuff('About to resume')
-				await delay(1000);
+				await delay(stepDelay);
 				await audioContext.resume();
 				logStuff( 'Resumed');
 				
-				await delay(1000);
-				stream = await navigator.mediaDevices.getUserMedia({
-				  audio: {
-					echoCancellation: false,
-					noiseSuppression: false,
-					autoGainControl: false,
-					channelCount: { ideal: 1 }
-				  },
-				  video: false
-				})
-				logStuff( !!stream ? "Stream ok" : "stream not ok")
-				
-				await delay(1000);
-				const analyser = audioContext.createAnalyser()
-				logStuff( !!analyser ? "Analyser ok" : "Analyser not ok")
-				if( analyser) {
-					analyser.fftSize = FFT_SIZE
-					analyser.smoothingTimeConstant = 0.12
-					analyser.minDecibels = -95
-					analyser.maxDecibels = -20
+				await delay(stepDelay);
+				if( navigator?.mediaDevices?.getUserMedia) {
+					stream = await navigator.mediaDevices.getUserMedia({
+					  audio: {
+						echoCancellation: false,
+						noiseSuppression: false,
+						autoGainControl: false,
+						channelCount: { ideal: 1 }
+					  },
+					  video: false
+					})
+					logStuff( !!stream ? "Stream ok" : "stream not ok")
+					
+					await delay(stepDelay);
+					const analyser = audioContext.createAnalyser()
+					logStuff( !!analyser ? "Analyser ok" : "Analyser not ok")
+					if( analyser) {
+						analyser.fftSize = FFT_SIZE
+						analyser.smoothingTimeConstant = 0.12
+						analyser.minDecibels = -95
+						analyser.maxDecibels = -20
 
-					await delay(1000);
-					const source = audioContext.createMediaStreamSource(stream)
-					logStuff( !!source ? "Source ok" : "Source not ok")
-					if( source) {
-						source.connect(analyser)
-						delay(250);
+						await delay(stepDelay);
+						const source = audioContext.createMediaStreamSource(stream)
+						logStuff( !!source ? "Source ok" : "Source not ok")
+						if( source) {
+							source.connect(analyser)
+							await delay(stepDelay);
+						}
 					}
+				}
+				else {
+					logStuff( navigator ? "Navigator" : "no Navigator");
+					logStuff( navigator?.mediaDevices ? "Media devices" : "No mediaDevices");
+					logStuff( navigator?.mediaDevices?.getUserMedia ? "userMedia" : "No userMedia");
 				}
 			}
 			logStuff( 'Done')
