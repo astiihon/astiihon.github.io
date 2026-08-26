@@ -210,6 +210,8 @@
 			audioContext = new AudioCtor()
 			logStuff( !!audioContext ? "audioContext ok" : "audioContext not ok")
 			if( audioContext) {
+				logStuff('About to resume')
+				delay(1000);
 				await audioContext.resume();
 				logStuff( 'Resumed');
 				
